@@ -10,7 +10,7 @@
 #SBATCH --time=24:00:00
 # #SBATCH --qos=private
 #SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=you@asu.edu
+#SBATCH --mail-user=your_email@example.com
 
 set -euo pipefail
 mkdir -p logs
@@ -21,12 +21,12 @@ export MKL_NUM_THREADS="${SLURM_CPUS_PER_TASK:-8}"
 export OPENBLAS_NUM_THREADS="${SLURM_CPUS_PER_TASK:-8}"
 export MPLBACKEND=Agg
 export PYTHONUNBUFFERED=1
-export TORCH_HOME="${TORCH_HOME:-/scratch/ykong26/datasets/NIH_ChestXRay/.torch}"
+export TORCH_HOME="${TORCH_HOME:-$HOME/.cache/torch}"
 
 # ===== 重要路徑 =====
-REPO_DIR="${REPO_DIR:-/scratch/ykong26/DNN_Xray}"   # 你的訓練腳本所在資料夾
+REPO_DIR="${REPO_DIR:-${SLURM_SUBMIT_DIR:-$PWD}}"   # 你的訓練腳本所在資料夾
 PYFILE="${PYFILE:-train_DNN.py}"                     # 你的訓練腳本檔名
-DATA_ROOT="${DATA_ROOT:-/scratch/ykong26/datasets/NIH_ChestXray}"
+DATA_ROOT="${DATA_ROOT:-${REPO_DIR}/NIH_data}"
 SAVE_DIR="${SAVE_DIR:-${DATA_ROOT}/checkpoints}"
 
 # 超參（可在 sbatch 時用 --export 覆蓋）
