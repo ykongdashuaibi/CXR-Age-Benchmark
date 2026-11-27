@@ -131,35 +131,11 @@ Written to `--save_dir`:
 
 ## Model architecture
 
-**Backbone.** An ImageNet-pretrained CNN with its original classification layer removed. Supported options for `--backbone`:
+Supported options for `--backbone`:
 
 `resnet50`, `resnet101`, `resnet152`, `densenet121`, `densenet169`, `densenet201`, `efficientnet_b0`, `efficientnet_b3`, `vgg16`, `vgg19`
 
-**Regression head.** A multilayer perceptron on the pooled backbone features:
-
-`Dropout(p)` → `Linear(F, 512)` → `ReLU` → `Dropout(p)` → `Linear(512, 256)` → `ReLU` → `Dropout(p/2)` → `Linear(256, 1)`
-
-where `F` is the backbone feature dimension and `p` is `--dropout`.
-
-**Training setup.**
-
-- Loss: L1 (mean absolute error).
-- Optimizer: Adam, with gradient-norm clipping at 1.0.
-- Scheduler: `ReduceLROnPlateau` on validation MAE (factor 0.5, patience 5).
-- Model selection: the epoch with the lowest validation MAE.
-- Input: grayscale images converted to 3 channels, resized to `img_size` × `img_size`, normalized with ImageNet statistics.
-- Training augmentation: random rotation (±20°), random translation (up to 10%), and brightness and contrast jitter. Validation images are not augmented.
-- Samples with an age outside 0–120 are filtered out.
-
-## Evaluation metrics
-
-Computed on the validation set after each epoch, and in full for the best epoch:
-
-- Mean absolute error (MAE, in years)
-- Mean squared error (MSE)
-- Root mean squared error (RMSE, in years)
-- Coefficient of determination (R²)
-- Pearson correlation coefficient (r) and its p-value
+All backbones are ImageNet-pretrained, and the default is `resnet50`.
 
 ## Reference
 
